@@ -90,9 +90,7 @@ class Model:
 			k += n.getDofNum();
 
 	def outputResult(self):
-		for e in self.elements:
-			stress = e.getStress();
-			print(stress[0][0]);
+		pass;
 
 	def solve(self):
 		self.init();

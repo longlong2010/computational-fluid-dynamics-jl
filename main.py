@@ -12,22 +12,27 @@ if __name__ == '__main__':
 	for x in bdf.spcs:
 		spc = bdf.get_spcs(x);
 
+
+	nodes = dict();
+	for x in bdf.nodes:
+		n = bdf.nodes[x];
+		c = n.xyz;
+		node = Node(c[0], c[1]);
+		if x in spc[0]:
+			node.addConstraint(Constraint.PHI);
+		if c[0] < 1e-5:
+			node.addLoad(Load.PHI, 2);
+		if abs(c[0] - 5) < 1e-5:
+			node.addLoad(Load.PHI, -2);
+		nodes[x] = node;
+
 	for x in bdf.elements:
 		e = bdf.elements[x];
 		[i, j, k] = e.nodes;
-		c1 = bdf.nodes[i].xyz;
-		c2 = bdf.nodes[j].xyz;
-		c3 = bdf.nodes[k].xyz;
-
-		n1 = Node(c1[0], c1[1]);
-		n2 = Node(c2[0], c2[1]);
-		n3 = Node(c3[0], c3[1]);
-		if i in spc[0]:
-			n1.addConstraint(Constraint.PHI);
-		if j in spc[0]:
-			n2.addConstraint(Constraint.PHI);
-		if k in spc[0]:
-			n3.addConstraint(Constraint.PHI);
+		n1 = nodes[i];
+		n2 = nodes[j];
+		n3 = nodes[k];
+		
 		model.addElement(Tria3Element(n1, n2, n3));
 	
 	model.solve();
