@@ -90,7 +90,14 @@ class Model:
 			k += n.getDofNum();
 
 	def outputResult(self):
-		pass;
+		for n in self.nodes:
+			r = [];
+			r.append(n.x);
+			r.append(n.y);
+			dofs = n.getDofs();
+			for d in dofs:
+				r.append(n.values[d]);
+			print(r);
 
 	def solve(self):
 		self.init();

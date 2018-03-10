@@ -22,10 +22,12 @@ if __name__ == '__main__':
 		node = Node(c[0], c[1]);
 		if x in spc[0]:
 			node.addConstraint(Constraint.PHI);
-		if c[0] < 1e-5:
-			node.addLoad(Load.PHI, 2);
-		if abs(c[0] - 5) < 1e-5:
-			node.addLoad(Load.PHI, -2);
+		if c[0] < 1e-5 or abs(c[0] - 5) < 1e-5:
+			node.addConstraint(Constraint.PHI, c[1] - 0.5);
+		if c[1] < 1e-5:
+			node.addConstraint(Constraint.PHI, -0.5);
+		if abs(c[1] - 1) < 1e-5:
+			node.addConstraint(Constraint.PHI, 0.5);
 		nodes[x] = node;
 
 	for x in bdf.elements:
