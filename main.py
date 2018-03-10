@@ -1,6 +1,8 @@
 from load import *;
 from geometry import *;
 from model import *;
+import sys
+sys.path.append('pyNastran');
 from pyNastran.bdf.bdf import BDF, read_bdf;
 if __name__ == '__main__':
 	numpy.set_printoptions(threshold = numpy.nan);
