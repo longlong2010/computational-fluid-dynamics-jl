@@ -1,42 +1,38 @@
-from load import *;
-from geometry import *;
-from model import *;
-import sys
-sys.path.append('pyNastran');
-from pyNastran.bdf.bdf import BDF, read_bdf;
+from matplotlib.tri import Triangulation, CubicTriInterpolator;
+import matplotlib.pyplot as plt;
+import numpy;
+
+
 if __name__ == '__main__':
-	numpy.set_printoptions(threshold = numpy.nan);
-
-	model = Model();
-	bdf = BDF(debug=False);
-	bdf.read_bdf('A1.bdf', punch=True);
-
-	for x in bdf.spcs:
-		spc = bdf.get_spcs(x);
-
-
-	nodes = dict();
-	for x in bdf.nodes:
-		n = bdf.nodes[x];
-		c = n.xyz;
-		node = Node(c[0], c[1]);
-		if x in spc[0]:
-			node.addConstraint(Constraint.PHI);
-		if c[0] < 1e-5 or abs(c[0] - 5) < 1e-5:
-			node.addConstraint(Constraint.PHI, c[1] - 0.5);
-		if c[1] < 1e-5:
-			node.addConstraint(Constraint.PHI, -0.5);
-		if abs(c[1] - 1) < 1e-5:
-			node.addConstraint(Constraint.PHI, 0.5);
-		nodes[x] = node;
-
-	for x in bdf.elements:
-		e = bdf.elements[x];
-		[i, j, k] = e.nodes;
-		n1 = nodes[i];
-		n2 = nodes[j];
-		n3 = nodes[k];
-		
-		model.addElement(Tria3Element(n1, n2, n3));
+	x = [];
+	y = [];
+	v = [];
+	m = [];
+	for line in open('data.1'):
+		row = line.strip().split(" ");
+		x.append(float(row[0]));
+		y.append(float(row[1]));
+	for line in open('data.2'):
+		row = line.strip().split(" ");
+		v.append(float(row[0]));
+	for line in open('data.3'):
+		row = line.strip().split(" ");
+		m.append([int(row[0]) - 1, int(row[1]) - 1, int(row[2]) - 1]);
 	
-	model.solve();
+	triangles = Triangulation(x, y, m);
+
+	tci = CubicTriInterpolator(triangles, -numpy.array(v));
+	(u, v) = tci.gradient(triangles.x, triangles.y);
+	v_norm = numpy.sqrt(u ** 2, v ** 2);
+
+	fig, ax = plt.subplots();
+	ax.set_aspect('equal');
+	ax.use_sticky_edges = False;
+	ax.margins(0.07);
+	ax.triplot(triangles, color='0.8', lw=0.5);
+
+	#tcf = ax.tricontourf(triangles, -numpy.array(v));
+	#fig.colorbar(tcf);
+
+	ax.quiver(triangles.x, triangles.y, u / v_norm, v / v_norm, color='blue');
+	plt.savefig('1.svg');
