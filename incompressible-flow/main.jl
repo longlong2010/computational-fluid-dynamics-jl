@@ -7,11 +7,11 @@ begin
 	local elements::Array{Array{Int32}} = Array{Array{Int32}}([]);
 	local loads::Dict{Int32, Float64} = Dict{Int32, Float64}();
 	
-	local mat = Material(0.1, 1.0);
+	local mat = Material(0.053, 1.0);
 
 	local m = Model();
 
-	for line in eachline("A9.bdf")
+	for line in eachline("A7.bdf")
 		if line[1] != '$'
 			local len = length(line);
 			local n = len ÷ 8 + 1;
@@ -37,7 +37,7 @@ begin
 	addConstraint(spc1, U::Dof, 5.0);
 	addConstraint(spc1, V::Dof, 0.0);
 	addConstraint(spc1, P::Dof, 0.0);
-	for i = 1 : 21
+	for i = 1 : 120
 		addNode(spc1, nodes[i]);
 		nodes[i].vals[U::Dof] = 5.0;
 	end
@@ -46,13 +46,7 @@ begin
 	addConstraint(spc2, U::Dof, 0.0);
 	addConstraint(spc2, V::Dof, 0.0);
 	addConstraint(spc2, P::Dof, 0.0);
-	for i = 42 : 21 : 420
-		addNode(spc2, nodes[i]);
-	end
-	for i = 22 : 21 : 400
-		addNode(spc2, nodes[i]);
-	end
-	for i = 421 : 441
+	for i = 121 : 128
 		addNode(spc2, nodes[i]);
 	end
 
@@ -67,7 +61,7 @@ begin
 	end
 	addConstraint(m, spc1);
 	addConstraint(m, spc2);
-	for i = 1 : 100
+	for i = 1 : 300
 		solve(m);
 	end
 	save(m, "data");

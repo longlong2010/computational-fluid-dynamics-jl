@@ -22,5 +22,6 @@ if __name__ == '__main__':
 		m.append([int(row[0]) - 1, int(row[1]) - 1, int(row[2]) - 1]);
 
 	fig, ax = plt.subplots();
+	ax.set_aspect('equal');
 	q = ax.quiver(x, y, u, v);
 	plt.savefig('1.svg');
