@@ -9,6 +9,7 @@ if __name__ == '__main__':
 	y = [];
 	u = [];
 	v = [];
+	p = [];
 	m = [];
 	for line in open('data.1'):
 		row = line.strip().split(" ");
@@ -19,6 +20,8 @@ if __name__ == '__main__':
 		u0 = float(row[0]);
 		v0 = float(row[2]);
 		u.append(u0);
+		#p.append(math.sqrt(u0 ** 2 + v0 ** 2));
+		#p.append(float(row[1]));
 		v.append(v0);
 	for line in open('data.3'):
 		row = line.strip().split(" ");
@@ -26,6 +29,12 @@ if __name__ == '__main__':
 
 	fig, ax = plt.subplots();
 	ax.set_aspect('equal');
-	q = ax.quiver(x, y, u, v);
-		
+	q = ax.quiver(x, y, u, v);	
 	plt.savefig(sys.argv[1] + '.png');
+
+	#triang = Triangulation(x, y);
+	#fig1, ax1 = plt.subplots();
+	#ax1.set_aspect('equal');
+	#tpc = ax1.tripcolor(triang, p, shading='gouraud', cmap = 'jet');
+	#fig1.colorbar(tpc);
+	#plt.savefig(sys.argv[1] + '.png');

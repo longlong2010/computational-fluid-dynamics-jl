@@ -33,16 +33,15 @@ begin
 		end
 	end
 
-
 	local spc1 = SPC();
 	addConstraint(spc1, U::Dof, 5.0);
 	addConstraint(spc1, V::Dof, 0.0);
 	addConstraint(spc1, P::Dof, 0.0);
-	for i = 92 : 100
+	for i = 83 : 101
 		addNode(spc1, nodes[i]);
 		nodes[i].vals[U::Dof] = 5.0;
 	end
-	for i = 1 : 91
+	for i = 108 : 200
 		addNode(spc1, nodes[i]);
 		nodes[i].vals[U::Dof] = 5.0;
 	end
@@ -51,7 +50,13 @@ begin
 	addConstraint(spc2, U::Dof, 0.0);
 	addConstraint(spc2, V::Dof, 0.0);
 	addConstraint(spc2, P::Dof, 0.0);
-	for i = 101 : 150
+	for i = 1 : 82
+		addNode(spc2, nodes[i]);
+	end
+	for i = 102 : 181
+		addNode(spc2, nodes[i]);
+	end
+	for i = 201 : 250
 		addNode(spc2, nodes[i]);
 	end
 
