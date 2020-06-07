@@ -1,1 +1,2 @@
 *.jl linguist-language=julia
+*.bdf linguist-language=julia
