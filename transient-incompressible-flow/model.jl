@@ -1,3 +1,5 @@
+using SparseArrays;
+
 mutable struct Model
 	nodes::Array{Node};
 	elements::Array{Element};
@@ -39,8 +41,8 @@ end
 function solve(self::Model, dt::Float64)
 	ndof = getDofNum(self);
 	nnode = getNodeNum(self);
-	K = zeros(Float64, ndof, ndof);
-	M = zeros(Float64, ndof, ndof);
+	K = spzeros(Float64, ndof, ndof);
+	M = spzeros(Float64, ndof, ndof);
 	R = zeros(Float64, ndof, 1);
 	inode::Int32 = 1;
 	mnode::Dict{Node, Int32} = Dict{Node, Int32}();
@@ -101,7 +103,6 @@ function solve(self::Model, dt::Float64)
 		node.vals[U::Dof] = self.result[inode];
 		node.vals[P::Dof] = self.result[inode + nnode];
 		node.vals[V::Dof] = self.result[inode + nnode * 2];
-
 		inode += 1;
 	end
 end
